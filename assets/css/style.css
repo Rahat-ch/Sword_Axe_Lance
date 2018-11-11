@@ -1,0 +1,23 @@
+#chatAndScore{
+  margin-top: 20px;
+}
+
+
+#scores{
+  height: 240px;
+}
+
+#messageDisplay{
+  height: 150px;
+  overflow-y: scroll;
+}
+
+
+#playerRegister{
+  padding-left: 65%;
+}
+
+#triangle{
+  width: 25%;
+  height: auto;
+}

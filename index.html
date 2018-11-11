@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <link rel="stylesheet" href="assets/css/style.css">
+
+    <script src="https://www.gstatic.com/firebasejs/5.5.7/firebase.js"></script>
+    <title>Sword Axe and Lance</title>
+  </head>
+  <body>
+
+<!--Fluid Header  -->
+    <div class="jumbotron jumbotron-fluid">
+  <div class="container">
+    <h1 class="display-4">Sword, Axe, and Lance</h1>
+    <p class="lead">Battle to the death against your enemies online!</p>
+    <form class="form-inline" id="playerRegister">
+  <div class="form-group mx-sm-3 mb-2">
+    <label for="inputName" class="sr-only">Name</label>
+    <input type="text" class="form-control" id="inputName" placeholder="Choose a name">
+  </div>
+  <button type="submit" class="btn btn-primary mb-2" id="joinFight">Join the fight</button>
+</form>
+  </div>
+</div>
+
+<div class="row">
+
+  <div class="col-sm-6">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">Game Message</h5>
+        <p id="messageText"> </p>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" style="width: 10rem;">
+  <img class="card-img-top" src="assets/images/triangle.png" alt="win conditions">
+  <div class="card-body">
+
+  </div>
+</div>
+
+
+</div>
+<br>
+
+<!--Play area cards  -->
+
+<div class="row">
+
+  <div class="col-sm-4">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title player1Name">Player 1</h5>
+        <p class="card-text">Choose a weapon to kill your foe!</p>
+        <button type="button" class="btn btn-outline-primary">Sword</button>
+        <button type="button" class="btn btn-outline-primary">Axe</button>
+        <button type="button" class="btn btn-outline-primary">Lance</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-sm-4">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">Battle Field</h5>
+        <div id="fightArea">
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-sm-4">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title player2Name">Player 2</h5>
+        <p class="card-text">Choose a weapon to kill your foe!.</p>
+        <button type="button" class="btn btn-outline-primary">Sword</button>
+        <button type="button" class="btn btn-outline-primary">Axe</button>
+        <button type="button" class="btn btn-outline-primary">Lance</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row" id="chatAndScore">
+  <div class="col-sm-6">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">Chat Box</h5>
+        <div class="row">
+          <div class="col-sm-12">
+          <div class="card">
+            <div class="card-body" id="messageDisplay">
+            </div>
+              </div>
+          </div>
+        </div>
+        <form>
+          <br>
+  <div class="form-group">
+    <input type="text" class="form-control" id="chatMessage" placeholder="Message">
+  </div>
+  <button type="submit" class="btn btn-primary" id="chatSubmit">Send</button>
+</form>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-6">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">Scores</h5>
+        <div class="row">
+          <div class="col-sm-12">
+            <table class="table table-hover">
+    <thead>
+      <tr>
+        <th scope="col"></th>
+        <th scope="col" class="player1Name">Player 1</th>
+        <th scope="col" class="player2Name">Player 2</th>
+
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <th scope="row">Wins</th>
+        <td id="p1Wins">P1 Wins</td>
+        <td id ="p2Wins">P2 Wins</td>
+
+      </tr>
+      <tr>
+        <th scope="row">Losses</th>
+        <td id="p1loss">P1 Losses</td>
+        <td id="p2loss">P2 Losses</td>
+
+      </tr>
+    </tbody>
+  </table>
+          </div>
+        </div>
+        <form>
+          <br>
+</form>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="assets/javascript/game.js">
+
+    </script>
+  </body>
+</html>
