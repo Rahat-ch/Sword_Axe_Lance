@@ -22,7 +22,6 @@ var isConnected = database.ref(".info/connected");
 var playerChat = database.ref("/chat");
 
 //my global variables
-var weapons = ["Sword", "Axe", "Lance"];
 var playernumber = 0;
 var p1 = null;
 var p2 = null;
@@ -34,8 +33,6 @@ var playerOneWinCount = 0;
 var playerOneLossCount = 0;
 var playerTwoWinCount = 0;
 var playerTwoLossCount = 0;
-var p1Weapon = null;
-var p2Weapon = null;
 
 
 //player connection-stops if disconnected
@@ -58,7 +55,7 @@ function p1SnapshotToArray(snapshot) {
         var item = childSnapshot.val();
         item.key = childSnapshot.key;
 
-        p1arr.push(item);
+        p1arr.unshift(item);
     });
 
     return p1arr;
@@ -70,7 +67,7 @@ function p2SnapshotToArray(snapshot) {
         var item = childSnapshot.val();
         item.key = childSnapshot.key;
 
-        p2arr.push(item);
+        p2arr.unshift(item);
     });
 
     return p2arr;
@@ -82,10 +79,10 @@ player1.on("value", function(snapshot) {
   if (snapshot.child("/name").exists() === true){
       p1SnapshotToArray(snapshot)
       console.log(p1arr);
-      $(".player1Name").html(p1arr[1]);
-      p1 = p1arr[1];
-      $("#p1Wins").html(p1arr[2]);
-      $("#p1loss").html(p1arr[0]);
+      $(".player1Name").html(p1arr[2]);
+      p1 = p1arr[2];
+      $("#p1Wins").html(p1arr[1]);
+      $("#p1loss").html(p1arr[3]);
     } else {
       $("#messageText").text("Enter your name above to join the Fight!")
     }
@@ -98,10 +95,10 @@ player1.on("value", function(snapshot) {
       if (snapshot.child("/name").exists() === true){
           p2SnapshotToArray(snapshot)
           console.log(p2arr);
-          $(".player2Name").html(p2arr[1]);
-          p1 = p2arr[1];
-          $("#p2Wins").html(p2arr[2]);
-          $("#p2loss").html(p2arr[0]);
+          $(".player2Name").html(p2arr[2]);
+          p2 = p2arr[2];
+          $("#p2Wins").html(p2arr[1]);
+          $("#p2loss").html(p2arr[3]);
           noMorePlayers();
           $("#messageText").text("Select your Weapons!");
           }
@@ -133,9 +130,10 @@ $("#joinFight").on("click",function(event){
       name: playerName,
       wins: playerOneWinCount,
       loss: playerOneLossCount,
-      zweapon: p1Weapon
+      zweapon: "none"
+
     });
-    sessionStorage.setItem("player number", "1");
+    sessionStorage.setItem("player name", playerName);
     $(".player1Name").html(playerName);
     $("#messageText").text("Waiting for an opponent!");
     $("#playerRegister").remove();
@@ -148,9 +146,10 @@ $("#joinFight").on("click",function(event){
       name: playerName,
       wins: playerTwoWinCount,
       loss: playerTwoLossCount,
-      zweapon: p2Weapon
+      zweapon: "none"
+
     });
-    sessionStorage.setItem("player number", "2");
+    sessionStorage.setItem("player name", playerName);
     $(".player2Name").html(playerName);
     noMorePlayers();
     player2.onDisconnect().remove();
@@ -164,21 +163,21 @@ $("#joinFight").on("click",function(event){
 function p1Win(){
   playerOneWinCount ++;
   $("#p1Wins").html(playerOneWinCount);
-  $("#messageText").html("Player 1 Wins!");
+  alert(p1arr[2] + " wins! Choose more weapons to play again!")
 }
 
 //p1 wins function
 function p1loss(){
   playerOneLossCount ++;
   $("#p1loss").html(playerOneLossCount);
-  $("#messageText").html("Player 2 Wins!");
+  alert(p2arr[2] + " wins! Choose more weapons to play again!")
 }
 
 //p2 wins function
 function p2Win(){
   playerTwoWinCount ++;
   $("#p2Wins").html(playerTwoWinCount);
-  $("#messageText").html("Player 2 Wins!");
+  alert(p2arr[2] + " wins! Choose more weapons to play again!")
 
 }
 
@@ -186,146 +185,142 @@ function p2Win(){
 function p2loss(){
   playerTwoLossCount ++;
   $("#p2loss").html(playerTwoLossCount);
-  $("#messageText").html("Player 1 Wins!");
+  alert(p1arr[2] + " wins! Choose more weapons to play again!")
 }
 
 //tied game function
 function tie(){
   $("#messageText").html("This round is a tie");
+  alert("This game is a tie! Choose more weapons to play again!")
 }
 
 
-//weapon clicks
-$(document).on("click", "#sword1", function(){
-    p1Weapon = "Sword";
-    player1.set({
-        Name: p1name,
-        Wins: playerOneWinCount,
-        Losses: playerOneLossCount,
-        zweapon: p1Weapon
-    });
-    $("#messageText").html("Waiting for Player 2!");
-    weaponClash ();
-
-});
-
-$(document).on("click", "#axe1", function(){
-    p1Weapon = "Axe";
-    player1.set({
-        Name: p1name,
-        Wins: playerOneWinCount,
-        Losses: playerOneLossCount,
-        zweapon: p1Weapon
-    });
-    $("#messageText").html("Waiting for Player 2!");
-    weaponClash ();
-
-});
-
-$(document).on("click", "#lance1", function(){
-    p1Weapon = "Lance";
-    player1.set({
-        Name: p1name,
-        Wins: playerOneWinCount,
-        Losses: playerOneLossCount,
-        zweapon: p1Weapon
-    });
-    $("#messageText").html("Waiting for Player 2!");
-    weaponClash ();
-
-});
-
-$(document).on("click", "#sword2", function(){
-    p2Weapon = "Sword";
-    player2.set({
-        Name: p2name,
-        Wins: playerTwoWinCount,
-        Losses: playerTwoLossCount,
-        zweapon: p2Weapon
-    });
-    $("#messageText").html("Waiting for Player 1!");
-    weaponClash ();
-
-
-});
-
-$(document).on("click", "#axe2", function(){
-    p2Weapon = "Axe";
-    player2.set({
-        Name: p2name,
-        Wins: playerTwoWinCount,
-        Losses: playerTwoLossCount,
-        zweapon: p2Weapon
-    });
-    $("#messageText").html("Waiting for Player 1!");
-    weaponClash ();
-
-});
-
-$(document).on("click", "#lance2", function(){
-    p2Weapon = "Lance";
-    player2.set({
-        Name: p2name,
-        Wins: playerTwoWinCount,
-        Losses: playerTwoLossCount,
-        zweapon: p2Weapon
-    });
-    $("#messageText").html("Waiting for Player 1!");
-    weaponClash ();
-
-});
-
-//lots of if statements to check winner
+//lots of if statements to check winner funciont
 function weaponClash (){
-  if (p1Weapon === "Sword" && p2Weapon === "Sword") {
+  if (p1arr[0] === "Sword" && p2arr[0] === "Sword") {
           tie();
 
       }
 
-      else if (p1Weapon === "Sword" && p2Weapon === "Axe") {
+      else if (p1arr[0] === "Sword" && p2arr[0] === "Axe") {
           p1Win();
           p2loss();
       }
 
-      else if (p1Weapon === "Sword" && p2Weapon === "Lance") {
+      else if (p1arr[0] === "Sword" && p2arr[0] === "Lance") {
           p2Win();
           p1loss();
       }
 
-      else if (p1Weapon === "Axe" && p2Weapon === "Axe") {
+      else if (p1arr[0] === "Axe" && p2arr[0]  === "Axe") {
           tie();
       }
 
-      else if (p1Weapon === "Axe" && p2Weapon === "Lance") {
+      else if (p1arr[0] === "Axe" && p2arr[0] === "Lance") {
         p1Win();
         p2loss();
 
       }
 
-      else if (p1Weapon === "Axe" && p2Weapon === "Sword") {
+      else if (p1arr[0] === "Axe" && p2arr[0] === "Sword") {
         p2Win();
         p1loss();
       }
 
-       else if (p1Weapon === "Lance" && p2Weapon === "Lance") {
+       else if (p1arr[0] === "Lance" && p2arr[0] === "Lance") {
           tie();
       }
 
-      else if (p1Weapon === "Lance" && p2Weapon === "Sword") {
+      else if (p1arr[0] === "Lance" && p2arr[0] === "Sword") {
         p1Win();
         p2loss();
       }
 
-      else if (p1Weapon === "Lance" && p2Weapon === "Axe") {
+      else if (p1arr[0] === "Lance" && p2arr[0] === "Axe") {
         p2Win();
         p1loss();
       }
 };
 
+
+//weapon clicks for p1
+
+player1.on("value", function(snapshot) {
+
+  $(document).on("click", "#sword1", function(){
+      player1.update({
+          zweapon: "Sword"
+      });
+      p1SnapshotToArray(snapshot);
+      $("#messageText").html("Waiting for Player 2!");
+      weaponClash ();
+
+  });
+
+  $(document).on("click", "#axe1", function(){
+    player1.update({
+        zweapon: "Axe"
+      });
+      p1SnapshotToArray(snapshot);
+      $("#messageText").html("Waiting for Player 2!");
+      weaponClash ();
+
+  });
+
+  $(document).on("click", "#lance1", function(){
+    player1.update({
+        zweapon: "Lance"
+      });
+      p1SnapshotToArray(snapshot);
+      $("#messageText").html("Waiting for Player 2!");
+      weaponClash ();
+
+  });
+
+    });
+
+//weapon clicks for p2
+
+player2.on("value", function(snapshot) {
+
+  $(document).on("click", "#sword2", function(){
+    player2.update({
+        zweapon: "Sword"
+    });
+      p2SnapshotToArray(snapshot)
+      $("#messageText").html("Waiting for Player 1!");
+      weaponClash ();
+      console.log("This is P1 Array: " + p1arr);
+  });
+
+  $(document).on("click", "#axe2", function(){
+    player2.update({
+        zweapon: "Axe"
+    });
+      p2SnapshotToArray(snapshot)
+      $("#messageText").html("Waiting for Player 1!");
+      weaponClash ();
+
+  });
+
+  $(document).on("click", "#lance2", function(){
+    player2.update({
+        zweapon: "Lance"
+    });
+      p2SnapshotToArray(snapshot)
+      $("#messageText").html("Waiting for Player 1!");
+      weaponClash ();
+
+  });
+
+    });
+
+
+
+
 //once i figure out how to get p2 running need to make this for p2 as well
 playerChat.on("child_added", function(childSnapshot){
 
-            console.log("message sent");
             var latestMessage = $("<p>");
             latestMessage.addClass("chat-text");
             latestMessage.text(childSnapshot.val().message);
@@ -336,12 +331,15 @@ playerChat.on("child_added", function(childSnapshot){
 
         $(document).on("click","#chatSubmit", function(){
 
-           var newMessage = (p1name + ": " + $("#chatMessage").val().trim());
+           var newMessage = (sessionStorage.getItem("player name") + ": " + $("#chatMessage").val().trim());
 
             //post the chat to the database
             playerChat.push({
                 message: newMessage,
             });
+            //unable to get div to auto scroll this is what i tried
+            var objDiv = $("#messageDisplay");
+            objDiv.scrollTop = objDiv.scrollHeight;
             $("#chatMessage").val("");
             return false;
         });

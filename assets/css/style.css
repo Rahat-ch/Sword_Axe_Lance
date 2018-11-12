@@ -10,6 +10,7 @@
 #messageDisplay{
   height: 150px;
   overflow-y: scroll;
+  scroll-behavior: auto;
 }
 
 
